@@ -8,7 +8,7 @@ const {
 const db = require('../utilities/sqlMapper');
 var fs = require('fs');
 
-
+// het ticket_id & print html table
 router.get('/:ticket_id', [
 
     check('ticket_id', 'id should be an integer').isInt(),
@@ -30,6 +30,8 @@ router.get('/:ticket_id', [
             res.status(200).json(result);
 
             }else{ 
+            let randomArray = ticket.generateSquare();
+            console.log("RANDOM ARRAY",randomArray);
             let html_table = `<html>
             <head>
             <style>
@@ -41,9 +43,7 @@ router.get('/:ticket_id', [
             <body>
             
             <h1>PLAY BINGO</h1>
-            <h2>TicketID:`+result.data.ticket_id+`</h2>
-            
-            
+            <h2 style="color:#FF0000";>TicketID:`+result.data.ticket_id+`</h2>
             <table>
               <tr>
                   <th>B</th>
@@ -55,39 +55,39 @@ router.get('/:ticket_id', [
                
               </tr>
               <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-              </tr>
+                <td>`+randomArray[0]+`</td>
+                <td>`+randomArray[1]+`</td>
+                <td>`+randomArray[2]+`</td>
+                <td>`+randomArray[3]+`</td>
+                <td>`+randomArray[4]+`</td>
+                 </tr>
               <tr>
-                <td>6</td>
-                <td>7</td>
-                <td>8</td>
-                <td>9</td>
-                <td>10</td>
+              <td>`+randomArray[5]+`</td>
+              <td>`+randomArray[6]+`</td>
+              <td>`+randomArray[7]+`</td>
+              <td>`+randomArray[8]+`</td>
+              <td>`+randomArray[9]+`</td>
               </tr>
                <tr>
-                <td>11</td>
-                <td>12</td>
-                <td>13</td>
-                <td>14</td>
-                <td>15</td>
+               <td>`+randomArray[10]+`</td>
+                <td>`+randomArray[11]+`</td>
+                <td>`+randomArray[12]+`</td>
+                <td>`+randomArray[13]+`</td>
+                <td>`+randomArray[14]+`</td>
               </tr>
               <tr>
-                <td>16</td>
-                <td>17</td>
-                <td>18</td>
-                <td>19</td>
-                <td>20</td>
+              <td>`+randomArray[15]+`</td>
+              <td>`+randomArray[16]+`</td>
+              <td>`+randomArray[17]+`</td>
+              <td>`+randomArray[18]+`</td>
+              <td>`+randomArray[19]+`</td>
               </tr>
                <tr>
-                <td>21</td>
-                <td>22</td>
-                <td>23</td>
-                <td>24</td>
-                <td>25</td>
+               <td>`+randomArray[20]+`</td>
+                <td>`+randomArray[21]+`</td>
+                <td>`+randomArray[22]+`</td>
+                <td>`+randomArray[23]+`</td>
+                <td>`+randomArray[24]+`</td>
               </tr>
             
             
@@ -108,6 +108,9 @@ router.get('/:ticket_id', [
 });
 
 
+
+
+// generate ticket_id for a game_id & user
 router.post('/:game_id/ticket/:username/generate/', (req, res, next) => {
 
     ticket.createTicket(req, function (err, result) {

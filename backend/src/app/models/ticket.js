@@ -4,6 +4,33 @@ var tableAlias = " t ";
 var dbFields = ['ticket_id','game_id','user_name'];
 
 
+function generateSquare() {
+
+    let ticket = new Array(25);
+    let usedNumbers = new Array(76);
+    for (var i = 0; i < usedNumbers.length; i++) {
+        usedNumbers[i] = 0;
+    }
+    var temp = new Array(0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4);
+
+    for(let i =0; i<25; i++){
+        let newNumber = (temp[i] * 15) + generateNewNum();
+        while (usedNumbers[newNumber] == 1) {
+            newNumber = (temp[i] * 15) + generateNewNum();
+        }
+        ticket[i] = newNumber;
+        usedNumbers[newNumber] = 1;
+    }
+    console.log("TICKET ",ticket);
+    return ticket;
+
+}
+
+
+function generateNewNum() {
+    return Math.floor((Math.random() * 15) + 1); 
+}
+
 //////// get by id api of ticket table
 function get(req, callback) {
 
@@ -117,6 +144,7 @@ function createTicket(req, callback) {
 module.exports = {
 
     get,
-    createTicket
+    createTicket,
+    generateSquare
 
 }

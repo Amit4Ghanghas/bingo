@@ -135,7 +135,7 @@ function update(options = {}, callback) {
             }
         }
         if (conditions && conditions != "") {
-            sql = "UPDATE " + options.table + " SET " + options.setValues + ",updated_at=current_timestamp WHERE " + conditions;
+            sql = "UPDATE " + options.table + " SET " + options.setValues + "WHERE " + conditions;
         }
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
