@@ -115,7 +115,10 @@ function uniqueRandomNumber(req, callback) {
                 console.log("RESULT", result);
                 if (result.rowCount > 0) {
                     let numberArray = result.rows[0].numbers_spoken;
-                    if (numberArray.length > 75) {
+                    if(numberArray == null){
+                        numberArray = [];
+                    }
+                    if (numberArray.length < 75) {
                         let random_number = callNumber(numberArray, req.params.game_id);
                         return callback(null, {
                             message: "Success",

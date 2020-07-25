@@ -59,7 +59,7 @@ function select(options = {}, callback) {
                 limit = " LIMIT " + options.limit.limit;
             }
         }
-        sql += select + columns + from + joins + conditions + groupBy + orderBy + limit;
+        sql += select + columns + from + joins + conditions  + orderBy + limit;
 
         console.log('-------------------------QUERY -------------------------------------------------------', sql);
 

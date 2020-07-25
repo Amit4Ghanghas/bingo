@@ -1,0 +1,19 @@
+version : '3'
+services:
+    backend:
+        container_name: nodejs
+        image: 041298amit/node-app
+        restart: always
+        build: ./
+        ports:
+       - "8001:8001"
+       volumes:
+       - .:/app
+       - ./error.log:/usr/src/app/error.log
+       links:
+        postgres
+
+    postgres:
+        image: postgres
+        restart: always
+
