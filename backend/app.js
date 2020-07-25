@@ -35,7 +35,9 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 
 // Calling routes
 app.use('/api/game', gameRoutes);
-app.use('/api/game/', ticketRoutes);
+app.use('/api/game', ticketRoutes);
+app.use('/ticket', ticketRoutes);
+
 
 
 

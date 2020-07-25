@@ -18,7 +18,7 @@ router.post('/create/', (req, res, next) => {
             res.status(400).json(err);
         } else {
            
-            res.status(200).json(result);
+            res.status(201).json(result);
         }
 
     });

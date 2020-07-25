@@ -3,6 +3,39 @@ var dbTable = "public.ticket";
 var tableAlias = " t ";
 var dbFields = ['ticket_id','game_id','user_name'];
 
+
+//////// get by id api of ticket table
+function get(req, callback) {
+
+    try {
+        let columns = `t.*`;
+        let options = {
+            id: req.params.id,
+            from: dbTable + tableAlias,
+            conditions: " ticket_id = " + req.params.ticket_id,
+            columns: columns
+        }
+        db.select(options, function(err, result) {
+            if (err) {
+                return callback(err);
+            } else {
+                console.log("RESULT",result);
+                if(result.rowCount>0){
+
+                return callback(null,{message:"Success",data:{ ticket_id:result.rows[0].ticket_id}})
+                }else{
+                    return callback(null,{message:"ticket Doesnot exist"})
+                }
+            }
+        });
+    } catch (error) {
+        return callback(error);
+    }
+}
+
+
+
+
 function createTicket(req, callback) {
     try {
         req.body.game_id=req.params.game_id; 
@@ -82,7 +115,8 @@ function createTicket(req, callback) {
 
 
 module.exports = {
- 
+
+    get,
     createTicket
 
 }
