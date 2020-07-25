@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bingoServer.js",
+  "scripts": {
+    "start": "node bingoServer.js"
+  },
+  "author": "Amit Ghanghas",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.6.0",
+    "pg": "^8.3.0",
+    "pg-escape": "^0.2.0"
+  }
+}
