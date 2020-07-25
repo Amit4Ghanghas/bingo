@@ -1,15 +1,87 @@
 const db = require('../utilities/sqlMapper');
 var dbTable = "public.game";
 var tableAlias = " g ";
-var dbFields = ['game_id', 'game_name','numbers_spoken'];
+var dbFields = ['game_id', 'game_name', 'numbers_spoken'];
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function callNumber(numberSpoken, game_id) {
+    var rand = Math.floor(Math.random() * 75) + 1; // random number between 1 and 75
+    // if the number is in the array (already been called)
+    if (numberSpoken.includes(rand))
+        callNumber();
+    else {
+        numberSpoken.push(rand);
+        let object = {
+            game_id,
+            numbers_spoken: `'` + numberSpoken + `'`
+        }
+        update(object, (err, result) => {
+            if (err) {
+                throw err;
+            }
+        });
+        return rand;
 
 
-function randomNumber(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function gameStats(req, callback) {
 
+    try {
+
+        let columns = `g.*`;
+        let options = {
+            id: req.params.id,
+            from: dbTable + tableAlias,
+            conditions: " game_id = " + req.params.game_id,
+            columns: columns
+        }
+        db.select(options, function (err, result) {
+            if (err) {
+                return callback(err);
+            } else {
+                console.log("RESULT", result);
+                let numberArray = result.rows[0].numbers_spoken;
+                return callback(null, {
+                    message: "Success",
+                    spokenNumber: numberArray
+                });
+            }
+        });
+    } catch (error) {
+        return callback(error);
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function numberSpokenInGame(req, callback) {
+
+    try {
+
+        let columns = `g.*`;
+        let options = {
+            id: req.params.id,
+            from: dbTable + tableAlias,
+            conditions: " game_id = " + req.params.game_id,
+            columns: columns
+        }
+        db.select(options, function (err, result) {
+            if (err) {
+                return callback(err);
+            } else {
+                console.log("RESULT", result);
+                let numberArray = result.rows[0].numbers_spoken;
+                return callback(null, {
+                    message: "Success",
+                    spokenNumber: numberArray
+                });
+            }
+        });
+    } catch (error) {
+        return callback(error);
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function uniqueRandomNumber(req, callback) {
 
     try {
@@ -28,35 +100,17 @@ function uniqueRandomNumber(req, callback) {
                 console.log("RESULT", result);
                 if (result.rowCount > 0) {
                     let numberArray = result.rows[0].numbers_spoken;
-                    // let random_number = randomNumber(1, 25);
-                    // console.log("RESULT IN RANDOM", numberArray, random_number);
-                 
-                    // if (numberArray.length = 0) {
-                    //     numberArray.push(random_number);
-                    // } else {
-                    //     let n = numberArray.includes(random_number);
-                    //     console.log("N is ", n);
-                    //     if (n == true) {
-                    //         console.log("Number exist in array");
-                    //     } else {
-                    //         numberArray.push(random_number);
-                    //         console.log("TYPE OF NUMARRAY====",typeof(numberArray),numberArray);
-
-                    //         let object = {
-                    //             game_id:req.params.game_id,
-                    //             numbers_spoken : numberArray
-                    //         }
-                    //         console.log("TYPE OF NUMARRAY",typeof(numberArray),numberArray);
-                    //         // update(object);
-                    //         return callback(null, {
-                    //             message: "Success",
-                    //             unique_random_number: random_number,
-                    //             array: numberArray
-                    //         })
-                    //     }
-                    // }
-
-
+                    if (numberArray.length > 75) {
+                        let random_number = callNumber(numberArray, req.params.game_id);
+                        return callback(null, {
+                            message: "Success",
+                            spokenNumber: random_number
+                        });
+                    } else {
+                        return callback(null, {
+                            message: "Game Over"
+                        });
+                    }
                 } else {
                     return callback(null, {
                         message: "game Doesnot exist"
@@ -69,7 +123,8 @@ function uniqueRandomNumber(req, callback) {
     }
 }
 
-// ////////////////////////////add api of game table
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//add api of game table
 function create(req, callback) {
     try {
         let data = req.body;
@@ -150,17 +205,21 @@ function create(req, callback) {
         return callback(error);
     }
 }
-
-function update(object,callback) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function update(object, callback) {
     let data = object;
     let delim = "";
     let setValues = "";
     let conditions = "game_id = " + object.game_id;
-
     console.log("data--->", data)
     for (let key in data) {
         if (dbFields.includes(key)) {
-            setValues += db.updateString(key, data[key], delim);
+            if (key != 'numbers_spoken') {
+                setValues += db.updateString(key, data[key], delim);
+            } else {
+                var newStr = "{" + data[key].substring(1, data[key].length - 1) + "}";
+                setValues += db.updateString(key, newStr, delim);
+            }
             delim = ",";
         }
     }
@@ -175,7 +234,7 @@ function update(object,callback) {
             return callback(err);
         } else {
             try {
-                callback(null, result);
+                callback(null, 1);
             } catch (error) {
                 return callback(error);
             }
@@ -183,27 +242,13 @@ function update(object,callback) {
     });
 }
 
-
-
-function generateTicket() {
-    // set all elements in usedNumbers array as false
-    resetUsedNumbers();
-    // loops 24 times because there are 24 squares (not including free square)
-    for (var i = 0; i < 25; i++) {
-        if (i == 12) // skip free square
-            continue;
-        // generates a number for each square
-        generateSquare(i);
-    }
-}
-
-
-
- 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 module.exports = {
 
     create,
-    uniqueRandomNumber
+    uniqueRandomNumber,
+    numberSpokenInGame,
+    gameStats
 
 }

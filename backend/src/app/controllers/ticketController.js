@@ -8,7 +8,10 @@ const {
 const db = require('../utilities/sqlMapper');
 var fs = require('fs');
 
-// het ticket_id & print html table
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// get ticket_id & print html table
 router.get('/:ticket_id', [
 
     check('ticket_id', 'id should be an integer').isInt(),
@@ -108,7 +111,7 @@ router.get('/:ticket_id', [
 });
 
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // generate ticket_id for a game_id & user
 router.post('/:game_id/ticket/:username/generate/', (req, res, next) => {
@@ -124,6 +127,6 @@ router.post('/:game_id/ticket/:username/generate/', (req, res, next) => {
 
     });
 });
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = router;

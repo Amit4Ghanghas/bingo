@@ -7,6 +7,63 @@ const {
 } = require('express-validator');
 const db = require('../utilities/sqlMapper');
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// get number_spoken in game
+router.get('/:game_id/numbers', [
+
+    check('game_id', 'game_id should be an integer').isInt(),
+
+], (req, res, next) => {
+    const errors = validationResult(req);
+    console.log("Error in auth---------" + JSON.stringify(errors));
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    game.numberSpokenInGame(req, function(err, result) {
+        if (err) {
+           
+            res.status(400).json(err);
+        } else {
+            console.log("result",result);
+            
+            res.status(200).json(result);
+
+        }
+          
+    });
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// get stats of game
+router.get('/:game_id/stats', [
+
+    check('game_id', 'game_id should be an integer').isInt(),
+
+], (req, res, next) => {
+    const errors = validationResult(req);
+    console.log("Error in auth---------" + JSON.stringify(errors));
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    game.gameStats(req, function(err, result) {
+        if (err) {
+           
+            res.status(400).json(err);
+        } else {
+            console.log("result",result);
+            
+            res.status(200).json(result);
+
+        }
+          
+    });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // get ticket_id & print html table
 router.get('/:game_id/number/random', [
 
@@ -32,7 +89,7 @@ router.get('/:game_id/number/random', [
           
     });
 });
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // for creating game
 router.post('/create/', (req, res, next) => {
 
@@ -49,5 +106,5 @@ router.post('/create/', (req, res, next) => {
     });
 });
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = router;

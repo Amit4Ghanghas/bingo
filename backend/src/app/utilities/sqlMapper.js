@@ -150,57 +150,13 @@ function update(options = {}, callback) {
     }
 }
 
-// Remove query builder function (here we are updating is_removed field with 1)
-function remove(options = {}, callback) {
-    try {
-        let sql = "";
-        if (options.conditions && options.conditions != "") {
-            sql = "UPDATE " + options.table + " SET is_removed = true ,updated_at=current_timestamp WHERE " + options.conditions;
-        }
-        console.log('QUERY', sql);
-        executeQuery(sql, function (err, data) {
-            if (err) {
-                return callback( (err));
-            } else {
-                return callback(null, data);
-            }
-        });
-    } catch (error) {
-        return callback( (error));
-    }
-}
 
-// DELETE query builder function (here we are deleting the row)
-function permanentremove(options = {}, callback) {
-
-    try {
-        let sql = "";
-        if ((options.conditions && options.conditions != "" && !options.conditions.includes(null)) && (options.table && options.table != "")) {
-            sql = "DELETE FROM " + options.table + " WHERE " + options.conditions;
-            console.log("SQL-------" + sql);
-
-            executeQuery(sql, function (err, data) {
-                try {
-                    if (err) {
-                        return callback(err);
-                    } else {
-                        return callback(null, data);
-                    }
-                } catch (error) {
-                    return callback(error);
-                }
-            });
-        }
-    } catch (error) {
-        return callback(error);
-    }
-}
 
 // This function returns the values part of insert query
 function insertString(key, val, delim) {
     try {
         let str = "";
-        if (key == 'created_by') { val = global.user.user_id; }
+       
         if (val == null) {
             str = "";
         } else if (val == 'null') {
@@ -220,8 +176,6 @@ function insertString(key, val, delim) {
 function updateString(key, val, delim) {
     try {
         let str = "";
-        if (key == 'updated_by') { val = global.user.user_id; }
-
         if (val == null) {
             str = "";
         }
@@ -240,31 +194,7 @@ function updateString(key, val, delim) {
     }
 }
 
-function camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-        if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-        return index === 0 ? match.toLowerCase() : match.toUpperCase();
-    });
-}
 
-
-// With this function we can directly execute the whole sql query in model, controller or services
-function query(sql, callback) {
-    try {
-        console.log('IN mapper query ', sql);
-
-        executeQuery(sql, function (err, result) {
-            if (err) {
-                return callback( (err));
-            } else {
-
-                return callback(null, result);
-            }
-        });
-    } catch (error) {
-        return callback( (error));
-    }
-}
 
 // This is used to append the single codes in sql query
 function escape(data) {
@@ -285,14 +215,11 @@ function escape(data) {
 
 // Here we are exporting all the above function to use in another files like model, controller and services
 module.exports = {
-    query: query,
+
     select: select,
     insert: insert,
     update: update,
-    remove: remove,
-    permanentremove: permanentremove,
     updateString: updateString,
     insertString: insertString,
-    escape: escape,
-    camelize
+    escape: escape
 }
