@@ -26,7 +26,6 @@ function select(options = {}, callback) {
         let from = "";
         let joins = "";
         let conditions = "";
-        let groupBy = "";
         let orderBy = "";
         let limit = "";
 
@@ -39,19 +38,7 @@ function select(options = {}, callback) {
             });
         }
         if (options.conditions) { conditions = " WHERE " + options.conditions; } else { conditions = " WHERE 1 = 1 "; }
-        console.log('step-1');
-        if (options.IN) {
-            let arr = options.IN.list
-            conditions += " AND " + options.IN.attribute + " IN ("
-            for (i = 0; i < arr.length - 1; i++) {
-                conditions += arr[i] + ","
-            }
-            conditions += arr[i] + ") "
-        }
       
-        if (options.groupBy) {
-            groupBy += " GROUP BY (" + options.groupBy.by + ") ";
-        }
         if (options.orderBy) {
             orderBy += " ORDER BY";
             if (options.orderBy[0]) {
@@ -67,7 +54,6 @@ function select(options = {}, callback) {
         }
         if (options.limit) {
             if (options.limit.limit && options.limit.limit > 0) {
-                // let start = 0;
                 if (options.limit.start) { start = options.limit.start; }
 
                 limit = " LIMIT " + options.limit.limit;
@@ -118,21 +104,10 @@ function update(options = {}, callback) {
     let conditions = ""
     let sql = "";
     try {
-        if (options.IN) {
-            let arr = options.IN.list
-            conditions += options.IN.attribute + " IN ("
-            for (i = 0; i < arr.length - 1; i++) {
-                conditions += arr[i] + ","
-            }
-            conditions += arr[i] + ") "
-        }
+     
         if (options.conditions) {
-            if (options.IN) {
-                conditions += " AND " + options.conditions
-            }
-            else {
+            
                 conditions += options.conditions
-            }
         }
         if (conditions && conditions != "") {
             sql = "UPDATE " + options.table + " SET " + options.setValues + "WHERE " + conditions;
@@ -203,8 +178,7 @@ function escape(data) {
         if (typeof (data) == 'number' || typeof (data) === 'boolean') {
             return data;
         } else {
-            // data.replace("'", "\'");
-            // return "'" + data + "'";
+           
             return "'" + db.escape.string(data) + "'";
         }
     } catch (error) {
