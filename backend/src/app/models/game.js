@@ -41,12 +41,27 @@ function gameStats(req, callback) {
             if (err) {
                 return callback(err);
             } else {
-                console.log("RESULT", result);
-                let numberArray = result.rows[0].numbers_spoken;
-                return callback(null, {
-                    message: "Success",
-                    spokenNumber: numberArray
+
+                let columns = `COUNT(ticket_id)`;
+                let options = {
+                    id: req.params.id,
+                    from: 'ticket t',
+                    conditions: " game_id = " + req.params.game_id,
+                    columns: columns
+                }
+                db.select(options, function (err, result1) {
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        let numberArray = result.rows[0].numbers_spoken;
+                        return callback(null, {
+                            message: "Success",
+                            spokenNumber: numberArray,
+                            no_of_tickets: result1.rows[0].count
+                        });
+                    }
                 });
+                
             }
         });
     } catch (error) {
