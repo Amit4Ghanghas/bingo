@@ -143,6 +143,9 @@ function uniqueRandomNumber(req, callback) {
 function create(req, callback) {
     try {
         let data = req.body;
+        if(!data.game_name){
+            data.game_name = "TestGame";
+        }
         let delim = "";
         let columns = "";
         let values = "";
