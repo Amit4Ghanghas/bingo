@@ -49,7 +49,7 @@ function get(req, callback) {
                 console.log("RESULT",result);
                 if(result.rowCount>0){
 
-                return callback(null,{message:"Success",data:{ ticket_id:result.rows[0].ticket_id}})
+                return callback(null,{message:"Success",data:{ ticket_id:result.rows[0].ticket_id,game_id:result.rows[0].game_id}})
                 }else{
                     return callback(null,{message:"ticket Doesnot exist"})
                 }
