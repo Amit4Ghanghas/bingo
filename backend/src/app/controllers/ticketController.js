@@ -29,8 +29,7 @@ router.get('/:ticket_id', [
             if(result.message == "ticket Doesnot exist"){
             res.status(200).json(result);
 
-            }
-            let ticket_id = result.data.ticket_id;
+            }else{ 
             let html_table = `<html>
             <head>
             <style>
@@ -42,7 +41,7 @@ router.get('/:ticket_id', [
             <body>
             
             <h1>PLAY BINGO</h1>
-            <h2>TicketID:`+ticket_id+`</h2>
+            <h2>TicketID:`+result.data.ticket_id+`</h2>
             
             
             <table>
@@ -103,6 +102,7 @@ router.get('/:ticket_id', [
             res.sendfile('index.html',{root:'/home/amit/docker/bingo/backend'});
 
               });
+            }
         }
     });
 });
