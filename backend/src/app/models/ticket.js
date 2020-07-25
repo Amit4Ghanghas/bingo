@@ -1,13 +1,13 @@
 const db = require('../utilities/sqlMapper');
-var dbTable = "public.game";
-var tableAlias = " g ";
-var dbFields = ['game_id','game_name'];
+var dbTable = "public.ticket";
+var tableAlias = " t ";
+var dbFields = ['ticket_id','game_id','user_name'];
 
-
-
-// ////////////////////////////add api of game table
-function create(req, callback) {
+function createTicket(req, callback) {
     try {
+        req.body.game_id=req.params.game_id; 
+        req.body.user_name=req.params.username;
+
         let data = req.body;
         let delim = "";
         let columns = "";
@@ -43,10 +43,10 @@ function create(req, callback) {
                     console.log("Result",result);
                     if(result.rowCount>0){ 
                         let conditions = "";
-                        let columns = `g.*`;
+                        let columns = `t.*`;
             
                         let orderBy = {
-                            by: " g.game_id",
+                            by: " t.ticket_id",
                             order: "DESC"
                         };
             
@@ -64,12 +64,12 @@ function create(req, callback) {
                             return callback(err);
                         } else {
                                    console.log("GET RSULT",getresult);
-                                   let game_id = getresult.rows[0];
-                                   return callback(null,{message:"game created successfully",data:getresult.rows})          
+                                   let ticket_id = getresult.rows[0];
+                                   return callback(null,{message:"ticket generated successfully",data:getresult.rows})          
                                 }
                             });
                         }else{
-                            return callback(null,{message:"Problem in creating a game"})
+                            return callback(null,{message:"Problem in creating a ticket"})
                         }
                    
                 }
@@ -83,6 +83,6 @@ function create(req, callback) {
 
 module.exports = {
  
-    create
+    createTicket
 
 }

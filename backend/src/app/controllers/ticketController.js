@@ -1,5 +1,5 @@
 const express = require('express');
-const game = require('../models/game');
+const ticket = require('../models/ticket');
 const router = express.Router();
 const {
     check,
@@ -7,14 +7,11 @@ const {
 } = require('express-validator');
 const db = require('../utilities/sqlMapper');
 
+router.post('/:game_id/ticket/:username/generate/', (req, res, next) => {
 
-
-router.post('/create/', (req, res, next) => {
-
-    game.create(req, function (err, result) {
+    ticket.createTicket(req, function (err, result) {
         console.log('error', err);
         if (err) {
-           
             res.status(400).json(err);
         } else {
            

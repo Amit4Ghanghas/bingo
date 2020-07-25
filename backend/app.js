@@ -23,7 +23,9 @@ app.get('/',function(req,res){
 
 
 // Importing routes
-// const auth = require('./src/app/controllers/userController');
+const gameRoutes = require('./src/app/controllers/gameController');
+const ticketRoutes = require('./src/app/controllers/ticketController');
+
 
 
 app.use(express.static('public'));
@@ -32,7 +34,10 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 
 
 // Calling routes
-// app.use('/user', auth);
+app.use('/api/game', gameRoutes);
+app.use('/api/game/', ticketRoutes);
+
+
 
 
 

@@ -6,7 +6,7 @@ function executeQuery(sql, callback) {
         console.log("--------------------------in execute query")
         db.connectionPool.query(sql, function (error, results) {
             if (error) {
-                return callback(_error(error));
+                return callback( (error));
             } else {
 
                 return callback(null, results);
@@ -14,7 +14,7 @@ function executeQuery(sql, callback) {
         });
     }
     catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -31,9 +31,6 @@ function select(options = {}, callback) {
         let limit = "";
 
         let select = "SELECT ";
-        // console.log('INSIDE MAPPER',options.joins);
-
-
         if (options.columns) { columns = " " + options.columns; } else { columns = " *"; }
         if (options.from) { from = " FROM " + options.from; }
         if (options.joins) {
@@ -51,67 +48,7 @@ function select(options = {}, callback) {
             }
             conditions += arr[i] + ") "
         }
-        if (options.req) {
-            // console.log('step-2');
-            let req = options.req;
-            // console.log("Req.query.filter------", req.query.filter);
-
-            if (req.query.search) {
-                // console.log('step-3');
-                // req.query.search = (req.query.search).toLowerCase();
-                console.log("search options---> ", req.query.searchOptions);
-                const tAlias = req.query.searchOptions.tAlias ? req.query.searchOptions.tAlias : "";
-                const exactMatch = req.query.searchOptions.exactMatch ? req.query.searchOptions.exactMatch : false;
-
-                if (req.query.filter) {
-                    let arr = req.query.filter.split(',');
-                    conditions += ` AND  (`;
-                    let delim = "";
-                    arr.forEach(ar => {
-                        console.log("exactMatch ===> ", exactMatch);
-                        if (exactMatch || exactMatch == 'true') { conditions += delim + (tAlias ? tAlias + '.' : tAlias) + `${ar} = '${req.query.search}'`; } else { conditions += delim + (tAlias ? tAlias + '.' : tAlias) + `${ar} ILIKE '%${req.query.search}%'`; }
-                        delim = " OR ";
-                    });
-                    conditions += `)`;
-                }
-                // else{
-                //     conditions += ` AND  (ev.title LIKE '%` + req.query.search + `%')`;
-                // }
-            }
-
-            console.log("Body -----------> ", req.body);
-            if (req.body && req.body.advanceSearch) {
-                if ((req.body.advanceSearch && typeof (req.body.advanceSearch) == 'string')) {
-                    rTrim(req.body.advanceSearch, "'");
-                    rTrim(req.body.advanceSearch, '"');
-                    console.log("advancesearch after trim----", req.body.advanceSearch[0]);
-                }
-                // advanceSearch format := [{key:"subscription_type",value:["paid","free"]},{key:"level",value:["easy","moderate","difficult"]}];
-                if (req.body.advanceSearch[0]) {
-                    req.body.advanceSearch.forEach(as => {
-                        if (as.value && as.value.length > 0) {
-                            if (as.operator == "bool") {
-                                if (as.value == "s") {
-                                    as.value = 1;
-                                } else {
-                                    as.value = 0;
-                                }
-                                conditions += " AND (" + as.key + " = " + as.value + ")";
-                            } else if (as.operator == "range") {
-                                if (as.value[0 > as.value[1]]) {
-                                    console.log("Wrong Range in Advance Search");
-                                } else {
-                                    conditions += " AND (" + as.key + ">=" + as.value[0] + " AND " + as.key + "<=" + as.value[1] + ")";
-                                }
-                            } else {
-                                conditions += " AND (" + as.key + " LIKE '%" + as.value.toString().replace(',', "%' || " + as.key + " LIKE '%") + "%')";
-                            }
-                        }
-                    })
-                }
-            }
-        }
-
+      
         if (options.groupBy) {
             groupBy += " GROUP BY (" + options.groupBy.by + ") ";
         }
@@ -133,34 +70,23 @@ function select(options = {}, callback) {
                 // let start = 0;
                 if (options.limit.start) { start = options.limit.start; }
 
-                limit = " LIMIT " + options.limit.limit + " " + "OFFSET" + " " + options.limit.start;
+                limit = " LIMIT " + options.limit.limit;
             }
         }
-        console.log("above fcnt and cnt");
-        if (!options.id && options.groupBy) {
-            console.log("IN CNT FCNT CONITION");
-            sql += select + " COUNT(*) as fcnt " + "from (" + select + rTrim(columns) + from + joins + conditions + groupBy + ") as sq ; ";
-            sql += select + " COUNT(*) as cnt " + "from (" + select + rTrim(columns) + from + joins + groupBy + ") as sq ; ";
-        }
-        else if (!options.id) {
-            console.log("IN CNT FCNT CONITION");
-            sql += select + " COUNT(*) as fcnt " + from + joins + conditions + "; ";
-            sql += select + " COUNT(*) as cnt " + from + joins + "; ";
-        }
-        sql += select + rTrim(columns) + from + joins + conditions + groupBy + orderBy + limit;
+        sql += select + columns + from + joins + conditions + groupBy + orderBy + limit;
 
         console.log('-------------------------QUERY -------------------------------------------------------', sql);
 
         executeQuery(sql, function (err, data) {
             console.log("in select of sql mapper", data);
             if (err) {
-                return callback(_error(err));
+                return callback( (err));
             } else {
                 return callback(null, data);
             }
         });
     } catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -177,13 +103,13 @@ function insert(options = {}, callback) {
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
             if (err) {
-                return callback(_error(err));
+                return callback( (err));
             } else {
                 return callback(null, data);
             }
         });
     } catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -214,13 +140,13 @@ function update(options = {}, callback) {
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
             if (err) {
-                return callback(_error(err));
+                return callback( (err));
             } else {
                 return callback(null, data);
             }
         });
     } catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -234,13 +160,13 @@ function remove(options = {}, callback) {
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
             if (err) {
-                return callback(_error(err));
+                return callback( (err));
             } else {
                 return callback(null, data);
             }
         });
     } catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -286,7 +212,7 @@ function insertString(key, val, delim) {
         }
         return str;
     } catch (error) {
-        return _error(error);
+        return  (error);
     }
 }
 
@@ -310,7 +236,7 @@ function updateString(key, val, delim) {
         }
         return str;
     } catch (error) {
-        return _error(error);
+        return  (error);
     }
 }
 
@@ -329,14 +255,14 @@ function query(sql, callback) {
 
         executeQuery(sql, function (err, result) {
             if (err) {
-                return callback(_error(err));
+                return callback( (err));
             } else {
 
                 return callback(null, result);
             }
         });
     } catch (error) {
-        return callback(_error(error));
+        return callback( (error));
     }
 }
 
@@ -352,44 +278,10 @@ function escape(data) {
             return "'" + db.escape.string(data) + "'";
         }
     } catch (error) {
-        return _error(error);
+        return  (error);
     }
 }
 
-function createTable(options = {}, callback) {
-    try {
-        let pkey = ""
-        let checks = ""
-        let fkey = ""
-        if (options.pkey) {
-            pkey = ", PRIMARY KEY (" + options.pkey + ")"
-        }
-           if(options.checks){
-               let arr=options.checks
-               for(i=0;i<arr.length;i++){
-                  checks+= ", CHECK (" + arr[i].column + " IN (" + arr[i].IN +"))"
-               }
-           }
-        if (options.fkey) {
-            let arr = options.fkey
-            for (i=0;i<arr.length;i++) {
-                fkey += ", FOREIGN KEY (" + arr[i].local_column + ") REFERENCES" + arr[i].references + "(" + arr[i].referencing + ")"
-            }
-        }
-
-        let sql = "CREATE TABLE public." + options.table + " (" + options.columns + pkey + fkey + checks + ")";
-        console.log('QUERY', sql);
-        executeQuery(sql, function (err, data) {
-            if (err) {
-                return callback(_error(err));
-            } else {
-                return callback(null, data);
-            }
-        });
-    } catch (error) {
-        return callback(_error(error));
-    }
-}
 
 // Here we are exporting all the above function to use in another files like model, controller and services
 module.exports = {
@@ -402,6 +294,5 @@ module.exports = {
     updateString: updateString,
     insertString: insertString,
     escape: escape,
-    camelize,
-    createTable
+    camelize
 }
