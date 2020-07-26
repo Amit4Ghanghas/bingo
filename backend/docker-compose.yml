@@ -5,7 +5,10 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: stripe-example
+      POSTGRES_DB: bingo
+    volumes:
+      - ./game.sql:/docker-entrypoint-initdb.d/1-game.sql
+      - ./ticket.sql:/docker-entrypoint-initdb.d/2-ticket.sql  
     ports:
       - "5431:5432"
   web:

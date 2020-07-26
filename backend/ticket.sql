@@ -1,11 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 12.2 (Ubuntu 12.2-2.pgdg18.04+1)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-2.pgdg18.04+1)
-
--- Started on 2020-07-26 19:57:28 IST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,8 +14,6 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
-
-
 CREATE TABLE public.ticket (
     ticket_id bigint NOT NULL,
     game_id bigint,
@@ -31,7 +21,7 @@ CREATE TABLE public.ticket (
 );
 
 
-
+ALTER TABLE public.ticket OWNER TO postgres;
 
 CREATE SEQUENCE public.ticket_ticket_id_seq
     START WITH 1
@@ -41,29 +31,21 @@ CREATE SEQUENCE public.ticket_ticket_id_seq
     CACHE 1;
 
 
-
+ALTER TABLE public.ticket_ticket_id_seq OWNER TO postgres;
 
 
 ALTER SEQUENCE public.ticket_ticket_id_seq OWNED BY public.ticket.ticket_id;
 
 
-
 ALTER TABLE ONLY public.ticket ALTER COLUMN ticket_id SET DEFAULT nextval('public.ticket_ticket_id_seq'::regclass);
-
 
 
 ALTER TABLE ONLY public.ticket
     ADD CONSTRAINT ticket_pkey PRIMARY KEY (ticket_id);
 
 
-
 ALTER TABLE ONLY public.ticket
     ADD CONSTRAINT fk1_key FOREIGN KEY (game_id) REFERENCES public.game(game_id);
 
 
--- Completed on 2020-07-26 19:57:28 IST
-
---
--- PostgreSQL database dump complete
---
 

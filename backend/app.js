@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 var bodyParser = require('body-parser');
 
-
-
 // Importing routes
 const gameRoutes = require('./src/app/controllers/gameController');
 const ticketRoutes = require('./src/app/controllers/ticketController');

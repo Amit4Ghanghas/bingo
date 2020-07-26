@@ -1,11 +1,3 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 12.2 (Ubuntu 12.2-2.pgdg18.04+1)
--- Dumped by pg_dump version 12.2 (Ubuntu 12.2-2.pgdg18.04+1)
-
--- Started on 2020-07-26 19:55:07 IST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,7 +13,7 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
--
+
 
 CREATE TABLE public.game (
     game_id bigint NOT NULL,
@@ -30,7 +22,7 @@ CREATE TABLE public.game (
 );
 
 
-
+ALTER TABLE public.game OWNER TO postgres;
 
 
 CREATE SEQUENCE public.game_game_id_seq
@@ -41,26 +33,17 @@ CREATE SEQUENCE public.game_game_id_seq
     CACHE 1;
 
 
-
+ALTER TABLE public.game_game_id_seq OWNER TO postgres;
 
 
 
 ALTER SEQUENCE public.game_game_id_seq OWNED BY public.game.game_id;
 
 
-
-
 ALTER TABLE ONLY public.game ALTER COLUMN game_id SET DEFAULT nextval('public.game_game_id_seq'::regclass);
-
 
 
 ALTER TABLE ONLY public.game
     ADD CONSTRAINT game_pkey PRIMARY KEY (game_id);
 
-
--- Completed on 2020-07-26 19:55:07 IST
-
---
--- PostgreSQL database dump complete
---
 

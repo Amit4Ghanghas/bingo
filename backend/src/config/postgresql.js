@@ -3,10 +3,15 @@ const escape= require('pg-escape')
 const { Pool, Client } = require('pg')
 // require('dotenv').config()
 const connectionPool = new Pool({
-  host: `localhost`,
-  user: `amit`,
-  password: `password@2020`,
-  database: `db`,
+  // host: `localhost`,
+  // user: `amit`,
+  // password: `password@2020`,
+  // database: `db`,
+  // port: 5432
+  host: `172.21.0.2`,
+  user: `postgres`,
+  password: `postgres`,
+  database: `bingo`,
   port: 5432
 })
 
