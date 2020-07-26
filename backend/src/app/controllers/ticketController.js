@@ -118,15 +118,15 @@ router.get('/:ticket_id', [
     </body>
     </html>`;
                 console.log("HTML TABLE UPDATED", html_table);
-                fs.writeFile('index.html', html_table, function (err) {
-                    if (err) throw err;
-                    console.log('Saved!');
+                // fs.writeFile('index.html', html_table, function (err) {
+                //     if (err) throw err;
+                //     console.log('Saved!');
                     res.send(html_table);
                     // res.sendfile('index.html', {
                     //     root: '/home/amit/docker/bingo/backend'
                     // });
 
-                });
+                // });
             }
         }
     });
