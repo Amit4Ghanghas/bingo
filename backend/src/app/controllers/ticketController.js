@@ -60,7 +60,7 @@ router.get('/:ticket_id', [
     </head>
     <body >
     <h1><marquee behavior="scroll" direction="left">PLAY BINGO!!!</marquee></h1>
-    <h2 style="color:#FF0000">GAME-ID:` + result.data.game_id  + `</h2>
+    <h2 style="color:#FF0000">GAME-ID:` + result.data.game_id + `</h2>
     <h2 style="color:#FF0000">TICKET-ID:` + result.data.ticket_id + `</h2>
     <br>
      
@@ -114,7 +114,7 @@ router.get('/:ticket_id', [
     </table>
     <br>
 
-    <a href="http://localhost:8002/api/game/` +result.data.game_id +`/stats">Current Game Stats</a>
+    <a href="http://localhost:8002/api/game/` + result.data.game_id + `/stats">Current Game Stats</a>
     </body>
     </html>`;
                 console.log("HTML TABLE UPDATED", html_table);

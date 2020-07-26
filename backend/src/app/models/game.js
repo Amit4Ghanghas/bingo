@@ -61,7 +61,7 @@ function gameStats(req, callback) {
                         });
                     }
                 });
-                
+
             }
         });
     } catch (error) {
@@ -115,7 +115,7 @@ function uniqueRandomNumber(req, callback) {
                 console.log("RESULT", result);
                 if (result.rowCount > 0) {
                     let numberArray = result.rows[0].numbers_spoken;
-                    if(numberArray == null){
+                    if (numberArray == null) {
                         numberArray = [];
                     }
                     if (numberArray.length < 75) {
@@ -146,7 +146,7 @@ function uniqueRandomNumber(req, callback) {
 function create(req, callback) {
     try {
         let data = req.body;
-        if(!data.game_name){
+        if (!data.game_name) {
             data.game_name = "TestGame";
         }
         let delim = "";

@@ -20,19 +20,21 @@ router.get('/:game_id/numbers', [
     console.log("Error in auth---------" + JSON.stringify(errors));
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+            errors: errors.array()
+        });
     }
-    game.numberSpokenInGame(req, function(err, result) {
+    game.numberSpokenInGame(req, function (err, result) {
         if (err) {
-           
+
             res.status(400).json(err);
         } else {
-            console.log("result",result);
-            
+            console.log("result", result);
+
             res.status(200).json(result);
 
         }
-          
+
     });
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,19 +48,21 @@ router.get('/:game_id/stats', [
     console.log("Error in auth---------" + JSON.stringify(errors));
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+            errors: errors.array()
+        });
     }
-    game.gameStats(req, function(err, result) {
+    game.gameStats(req, function (err, result) {
         if (err) {
-           
+
             res.status(400).json(err);
         } else {
-            console.log("result",result);
-            
+            console.log("result", result);
+
             res.status(200).json(result);
 
         }
-          
+
     });
 });
 
@@ -74,19 +78,21 @@ router.get('/:game_id/number/random', [
     console.log("Error in auth---------" + JSON.stringify(errors));
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({
+            errors: errors.array()
+        });
     }
-    game.uniqueRandomNumber(req, function(err, result) {
+    game.uniqueRandomNumber(req, function (err, result) {
         if (err) {
-           
+
             res.status(400).json(err);
         } else {
-            console.log("result",result);
-            
+            console.log("result", result);
+
             res.status(200).json(result);
 
         }
-          
+
     });
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,10 +102,10 @@ router.post('/create/', (req, res, next) => {
     game.create(req, function (err, result) {
         console.log('error', err);
         if (err) {
-           
+
             res.status(400).json(err);
         } else {
-           
+
             res.status(201).json(result);
         }
 
