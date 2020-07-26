@@ -121,9 +121,10 @@ router.get('/:ticket_id', [
                 fs.writeFile('index.html', html_table, function (err) {
                     if (err) throw err;
                     console.log('Saved!');
-                    res.sendfile('index.html', {
-                        root: '/home/amit/docker/bingo/backend'
-                    });
+                    res.send(html_table);
+                    // res.sendfile('index.html', {
+                    //     root: '/home/amit/docker/bingo/backend'
+                    // });
 
                 });
             }
