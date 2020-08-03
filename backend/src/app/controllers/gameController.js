@@ -24,18 +24,36 @@ router.get('/:game_id/numbers', [
             errors: errors.array()
         });
     }
-    game.numberSpokenInGame(req, function (err, result) {
-        if (err) {
+    // game.numberSpokenInGame(req, function (err, result) {
+    //     if (err) {
 
-            res.status(400).json(err);
-        } else {
-            console.log("result", result);
+    //         res.status(400).json(err);
+    //     } else {
+    //         console.log("result", result);
 
-            res.status(200).json(result);
+    //         res.status(200).json(result);
 
-        }
+    //     }
 
-    });
+    // });
+
+    game.numberSpokenInGame().then((result) =>{
+        console.log("RR",result);
+        // res.status(200).json(result);
+        return new Promise((resolve, reject) => { 
+            // setTimeout(() => resolve(result), 1000);
+            resolve(result);
+          });
+    }).then((result) =>{
+        console.log("RR in 2nd then",result);
+        res.status(200).json("2nd then");
+
+    }).catch((error)=>{
+        console.log("CATCH");
+        res.status(400).json(error);
+
+    })
+  
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // get stats of game

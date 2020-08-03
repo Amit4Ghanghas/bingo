@@ -69,33 +69,51 @@ function gameStats(req, callback) {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function numberSpokenInGame(req, callback) {
+// function numberSpokenInGame(req, callback) {
 
-    try {
+//     try {
 
-        let columns = `g.*`;
-        let options = {
-            id: req.params.id,
-            from: dbTable + tableAlias,
-            conditions: " game_id = " + req.params.game_id,
-            columns: columns
-        }
-        db.select(options, function (err, result) {
-            if (err) {
-                return callback(err);
-            } else {
-                console.log("RESULT", result);
-                let numberArray = result.rows[0].numbers_spoken;
-                return callback(null, {
-                    message: "Success",
-                    spokenNumber: numberArray
-                });
+//         let columns = `g.*`;
+//         let options = {
+//             id: req.params.id,
+//             from: dbTable + tableAlias,
+//             conditions: " game_id = " + req.params.game_id,
+//             columns: columns
+//         }
+//         db.select(options, function (err, result) {
+//             if (err) {
+//                 return callback(err);
+//             } else {
+//                 console.log("RESULT", result);
+//                 let numberArray = result.rows[0].numbers_spoken;
+//                 return callback(null, {
+//                     message: "Success",
+//                     spokenNumber: numberArray
+//                 });
+//             }
+//         });
+//     } catch (error) {
+//         return callback(error);
+//     }
+// }
+
+function numberSpokenInGame(req) {
+    return new Promise(function (resolve, reject) {
+        let err = "err"
+        if (err == "err") {
+            return reject(err);
+        } else {
+            let Finalresult = {
+                message: "Success for promise"
             }
-        });
-    } catch (error) {
-        return callback(error);
-    }
+            console.log("Final", Finalresult);
+            return resolve(Finalresult);
+        }
+    });
 }
+
+
+//   numberSpokenInGame();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function uniqueRandomNumber(req, callback) {
 
