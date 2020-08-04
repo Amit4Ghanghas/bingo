@@ -18,7 +18,8 @@ function executeQuery(sql, callback) {
 }
 
 // Select query builder function
-function select(options = {}, callback) {
+function select(options = {}) {
+    return selectPromise = new Promise((resolve, reject) => {
     try {
         let sql = "";
         let columns = "";
@@ -75,20 +76,22 @@ function select(options = {}, callback) {
         console.log('-------------------------QUERY -------------------------------------------------------', sql);
 
         executeQuery(sql, function (err, data) {
-            console.log("in select of sql mapper", data);
-            if (err) {
-                return callback((err));
-            } else {
-                return callback(null, data);
-            }
-        });
+            // console.log("in select of sql mapper", data);
+             if (err) {
+                 reject(err);
+             } else {
+                 resolve(data);
+             }
+         });
     } catch (error) {
-        return callback((error));
+        throw new Error(error);
     }
+})
 }
 
 // Insert query builder function
-function insert(options = {}, callback) {
+async function insert(options = {}, callback) {
+    return selectPromise = new Promise((resolve, reject) => {
     try {
         if (!options.multipleValues) {
             options.values = "(" + options.values + ")"
@@ -98,19 +101,23 @@ function insert(options = {}, callback) {
         let sql = "INSERT INTO " + options.table + " (" + options.columns + ") VALUES " + options.values;
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
-            if (err) {
-                return callback((err));
-            } else {
-                return callback(null, data);
-            }
-        });
+            // console.log("in select of sql mapper", data);
+             if (err) {
+                 reject(err);
+             } else {
+                 resolve(data);
+             }
+         });
     } catch (error) {
-        return callback((error));
+        throw new Error(error);
+
     }
+})
 }
 
 // Update query builder function
-function update(options = {}, callback) {
+function update(options = {}) {
+    return selectPromise = new Promise((resolve, reject) => {
     let conditions = ""
     let sql = "";
     try {
@@ -124,15 +131,17 @@ function update(options = {}, callback) {
         }
         console.log('QUERY', sql);
         executeQuery(sql, function (err, data) {
-            if (err) {
-                return callback((err));
-            } else {
-                return callback(null, data);
-            }
-        });
+            // console.log("in select of sql mapper", data);
+             if (err) {
+                 reject(err);
+             } else {
+                 resolve(data);
+             }
+         });
     } catch (error) {
-        return callback((error));
+        throw new Error(error);
     }
+})
 }
 
 

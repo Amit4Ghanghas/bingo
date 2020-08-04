@@ -25,27 +25,13 @@ router.get('/:game_id/numbers', [
         });
     }
     try {
-        console.log("1");
-        let result = await game.numberSpokenInGame();
-        console.log("4",result);
+        let result = await game.numberSpokenInGame(req);
         res.status(200).json(result);
-        
+
     } catch (error) {
         res.status(400).json(error);
-        
+
     }
-    // game.numberSpokenInGame(req, function (err, result) {
-    //     if (err) {
-
-    //         res.status(400).json(err);
-    //     } else {
-    //         console.log("result", result);
-
-    //         res.status(200).json(result);
-
-    //     }
-
-    // });
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // get stats of game
@@ -53,7 +39,7 @@ router.get('/:game_id/stats', [
 
     check('game_id', 'game_id should be an integer').isInt(),
 
-], (req, res, next) => {
+], async (req, res, next) => {
     const errors = validationResult(req);
     console.log("Error in auth---------" + JSON.stringify(errors));
 
@@ -62,18 +48,14 @@ router.get('/:game_id/stats', [
             errors: errors.array()
         });
     }
-    game.gameStats(req, function (err, result) {
-        if (err) {
+    try {
+        let result = await game.gameStats(req);
+        res.status(200).json(result);
 
-            res.status(400).json(err);
-        } else {
-            console.log("result", result);
+    } catch (error) {
+        res.status(400).json(error);
 
-            res.status(200).json(result);
-
-        }
-
-    });
+    }
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +65,7 @@ router.get('/:game_id/number/random', [
 
     check('game_id', 'game_id should be an integer').isInt(),
 
-], (req, res, next) => {
+], async (req, res, next) => {
     const errors = validationResult(req);
     console.log("Error in auth---------" + JSON.stringify(errors));
 
@@ -92,34 +74,27 @@ router.get('/:game_id/number/random', [
             errors: errors.array()
         });
     }
-    game.uniqueRandomNumber(req, function (err, result) {
-        if (err) {
+    try {
+        let result = await game.uniqueRandomNumber(req);
+        res.status(200).json(result);
 
-            res.status(400).json(err);
-        } else {
-            console.log("result", result);
+    } catch (error) {
+        res.status(400).json(error);
 
-            res.status(200).json(result);
-
-        }
-
-    });
+    }
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // for creating game
-router.post('/create/', (req, res, next) => {
+router.post('/create/', async (req, res, next) => {
 
-    game.create(req, function (err, result) {
-        console.log('error', err);
-        if (err) {
+    try {
+        let result = await game.create(req);
+        res.status(200).json(result);
 
-            res.status(400).json(err);
-        } else {
+    } catch (error) {
+        res.status(400).json(error);
 
-            res.status(201).json(result);
-        }
-
-    });
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

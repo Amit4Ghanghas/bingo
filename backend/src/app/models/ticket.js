@@ -32,9 +32,8 @@ function generateNewNum() {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// get by id api of ticket table
-function get(req, callback) {
+async function get(req) {
 
-    try {
         let columns = `t.*`;
         let options = {
             id: req.params.id,
@@ -42,136 +41,118 @@ function get(req, callback) {
             conditions: " ticket_id = " + req.params.ticket_id,
             columns: columns
         }
-        db.select(options, function (err, result) {
-            if (err) {
-                return callback(err);
-            } else {
-                console.log("RESULT", result);
-                if (result.rowCount > 0) {
+        let err = new Array();
 
-                    return callback(null, {
-                        message: "Success",
-                        data: {
-                            ticket_id: result.rows[0].ticket_id,
-                            game_id: result.rows[0].game_id
-                        }
-                    })
-                } else {
-                    return callback(null, {
-                        message: "ticket Doesnot exist"
-                    })
+        let result = await db.select(options).catch((e) => err.push(e));
+        if (err.length > 0) {
+            throw new Error('Error in fetching data from db');
+        }
+            console.log("RESULT", result);
+        if (result.rowCount > 0) {
+
+            return  {
+                message: "Success",
+                data: {
+                    ticket_id: result.rows[0].ticket_id,
+                    game_id: result.rows[0].game_id
                 }
-            }
-        });
-    } catch (error) {
-        return callback(error);
-    }
+            };
+        } else {
+            return  { message: "ticket Doesnot exist"};
+        }
+         
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function createTicket(req, callback) {
-    try {
-        req.body.game_id = req.params.game_id;
-        req.body.user_name = req.params.username;
-        let columns = `g.*`;
-        let options = {
-            id: req.params.id,
-            from: 'game g',
-            conditions: " game_id = " + req.params.game_id,
-            columns: columns
-        }
-        db.select(options, function (err, result) {
-            if (err) {
-                return callback(err);
+async function createTicket(req) {
+    req.body.game_id = req.params.game_id;
+    req.body.user_name = req.params.username;
+    let columns = `g.*`;
+    let options = {
+        from: 'game g',
+        conditions: " game_id = " + req.params.game_id,
+        columns: columns
+    }
+    let err = new Array();
+    console.log("---",req.body,req.params);
+
+    let result = await db.select(options).catch((e) => err.push(e));
+    if (err.length > 0) {
+        throw new Error('Error in fetching data from db');
+    }
+    console.log("RESULT IN 1st",result.rows);
+    if (result.rowCount > 0) {
+        let data = req.body;
+        let delim = "";
+        let columns1 = "";
+        let values = "";
+        console.log("req--------------", req.body);
+
+        for (let key in data) {
+            if (data[key] == null) {
+                console.log("skipping null values");
             } else {
-                console.log("AAAA", result);
-                if (result.rowCount > 0) {
-                    let data = req.body;
-                    let delim = "";
-                    let columns = "";
-                    let values = "";
-                    let submit = true;
-                    console.log("req--------------", req.body);
-
-
-                    for (let key in data) {
-                        if (data[key] == null) {
-                            console.log("skipping null values");
-                        } else {
-                            if (dbFields.includes(key)) {
-                                columns += delim + key;
-                                values += db.insertString(key, data[key], delim);
-                                delim = ",";
-                            }
-                        }
-
-                    }
-
-                    let options = {
-                        table: dbTable,
-                        columns: columns,
-                        values: values
-                    }
-
-                    db.insert(options, function (err, result) {
-                        if (err) {
-
-                            return callback(err);
-                        } else {
-                            console.log("Result", result);
-                            if (result.rowCount > 0) {
-                                let conditions = "";
-                                let columns = `t.*`;
-
-                                let orderBy = {
-                                    by: " t.ticket_id",
-                                    order: "DESC"
-                                };
-
-
-                                let options = {
-                                    columns: columns,
-                                    from: dbTable + tableAlias,
-                                    conditions: conditions,
-                                    orderBy: orderBy,
-                                    limit: {
-                                        limit: 1
-                                    }
-                                }
-
-                                db.select(options, function (err, getresult) {
-                                    if (err) {
-                                        return callback(err);
-                                    } else {
-                                        console.log("GET RSULT", getresult);
-                                        let ticket_id = getresult.rows[0];
-                                        return callback(null, {
-                                            message: "ticket generated successfully",
-                                            data: getresult.rows
-                                        })
-                                    }
-                                });
-                            } else {
-                                return callback(null, {
-                                    message: "Problem in creating a ticket"
-                                })
-                            }
-
-                        }
-                    });
-                } else {
-                    return callback(null, {
-                        message: "Game didn't not exist"
-                    })
+                if (dbFields.includes(key)) {
+                    columns1 += delim + key;
+                    values += db.insertString(key, data[key], delim);
+                    delim = ",";
                 }
             }
-        });
-    } catch (error) {
-        return callback(error);
+
+        }
+
+        let options1 = {
+            table: dbTable,
+            columns: columns1,
+            values: values
+        }
+        let err1 = new Array();
+
+        let result1 = await db.insert(options1).catch((e) => err1.push(e));
+        if (err1.length > 0) {
+            throw new Error('Error in posting data in db');
+        }
+        let conditions2 = "";
+        let columns2 = `t.*`;
+
+        let orderBy2 = {
+            by: " t.ticket_id",
+            order: "DESC"
+        };
+
+
+        let options2 = {
+            columns: columns2,
+            from: dbTable + tableAlias,
+            conditions: conditions2,
+            orderBy: orderBy2,
+            limit: {
+                limit: 1
+            }
+        }
+        let err2 = new Array();
+
+        let result2 = await db.select(options2).catch((e) => err2.push(e));
+        if (err2.length > 0) {
+            throw new Error('Error in fetching data from db');
+        }
+
+        return {
+            message: "ticket generated successfully",
+            data: result2.rows
+        };
+
+    } else {
+        return {
+            message: "Game didn't not exist"
+        };
     }
+
+
 }
+// createTicket();
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
