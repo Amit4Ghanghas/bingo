@@ -18,7 +18,7 @@ function executeQuery(sql, callback) {
 }
 
 // Select query builder function
-function select(options = {}) {
+async function select(options = {}) {
     return selectPromise = new Promise((resolve, reject) => {
     try {
         let sql = "";
