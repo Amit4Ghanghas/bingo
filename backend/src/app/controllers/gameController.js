@@ -15,7 +15,7 @@ router.get('/:game_id/numbers', [
 
     check('game_id', 'game_id should be an integer').isInt(),
 
-], (req, res, next) => {
+], async (req, res, next) => {
     const errors = validationResult(req);
     console.log("Error in auth---------" + JSON.stringify(errors));
 
@@ -24,18 +24,28 @@ router.get('/:game_id/numbers', [
             errors: errors.array()
         });
     }
-    game.numberSpokenInGame(req, function (err, result) {
-        if (err) {
+    try {
+        console.log("1");
+        let result = await game.numberSpokenInGame();
+        console.log("4",result);
+        res.status(200).json(result);
+        
+    } catch (error) {
+        res.status(400).json(error);
+        
+    }
+    // game.numberSpokenInGame(req, function (err, result) {
+    //     if (err) {
 
-            res.status(400).json(err);
-        } else {
-            console.log("result", result);
+    //         res.status(400).json(err);
+    //     } else {
+    //         console.log("result", result);
 
-            res.status(200).json(result);
+    //         res.status(200).json(result);
 
-        }
+    //     }
 
-    });
+    // });
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // get stats of game

@@ -69,32 +69,65 @@ function gameStats(req, callback) {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function numberSpokenInGame(req, callback) {
+// function numberSpokenInGame(req, callback) {
 
-    try {
+//     try {
 
-        let columns = `g.*`;
-        let options = {
-            id: req.params.id,
-            from: dbTable + tableAlias,
-            conditions: " game_id = " + req.params.game_id,
-            columns: columns
+//         let columns = `g.*`;
+//         let options = {
+//             id: req.params.id,
+//             from: dbTable + tableAlias,
+//             conditions: " game_id = " + req.params.game_id,
+//             columns: columns
+//         }
+//         db.select(options, function (err, result) {
+//             if (err) {
+//                 return callback(err);
+//             } else {
+//                 console.log("RESULT", result);
+//                 let numberArray = result.rows[0].numbers_spoken;
+//                 return callback(null, {
+//                     message: "Success",
+//                     spokenNumber: numberArray
+//                 });
+//             }
+//         });
+//     } catch (error) {
+//         return callback(error);
+//     }
+// }
+
+async function numberSpokenInGame(req) {
+    console.log("2");
+        let error = "err1"
+        if(error == "err"){
+            return error;
+        }else{
+            console.log("3");
+            let Finalresult = {message:"Success in async"};
+            return Finalresult;
         }
-        db.select(options, function (err, result) {
-            if (err) {
-                return callback(err);
-            } else {
-                console.log("RESULT", result);
-                let numberArray = result.rows[0].numbers_spoken;
-                return callback(null, {
-                    message: "Success",
-                    spokenNumber: numberArray
-                });
-            }
-        });
-    } catch (error) {
-        return callback(error);
-    }
+        
+        // let columns = `g.*`;
+        // let options = {
+        //     id: req.params.id,
+        //     from: dbTable + tableAlias,
+        //     conditions: " game_id = " + req.params.game_id,
+        //     columns: columns
+        // }
+        // db.select(options, function (err, result) {
+        //     if (err) {
+        //         return callback(err);
+        //     } else {
+        //         console.log("RESULT", result);
+        //         let numberArray = result.rows[0].numbers_spoken;
+        //         return callback(null, {
+        //             message: "Success",
+        //             spokenNumber: numberArray
+        //         });
+        //     }
+        // });
+    
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function uniqueRandomNumber(req, callback) {
