@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "amit",
+    "password": "password@2020",
+    "database": "db",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "amit",
+    "password": "password@2020",
+    "database": "db",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
